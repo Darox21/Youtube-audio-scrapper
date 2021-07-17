@@ -10,17 +10,19 @@ from pytube import YouTube
 
 from utilities import *
 
-# import mutagen # Posible metadata editing in the future
 
 def main():
-    # Input
+    ############## EDIT THIS ###################################################
+    ############################################################################
     DOWNLOAD_DIR = 'D:\\Music\\Tests'
-    playlist = "https://music.youtube.com/playlist?list=OLAK5uy_mn9NjUilMFKR7ydZ12VxUTga47VKH-0So"
+    PLAYLIST = "https://music.youtube.com/playlist?list=OLAK5uy_mn9NjUilMFKR7ydZ12VxUTga47VKH-0So"
+    ############################################################################
 
-    download_audio(playlist, DOWNLOAD_DIR)
+    download_audio(PLAYLIST, DOWNLOAD_DIR)
 
 
 def download_audio(url:str, dir:str):
+    """Downloads every audio stream from a video or playlist link"""
     # Fetch all videos to download
     videos = get_videos(url)
 
@@ -40,13 +42,16 @@ def download_audio(url:str, dir:str):
         except Exception as e:
             print("Error on download")
             print(e)
-            sleep(5)
+            sleep(3)
             delete_last_lines()
     
         delete_last_lines(2)  # Pretty formating
         
 
 def filename_processor(v:YouTube) -> str:
+    """Removes everything inside parenthesis, duplicated authors,
+    extra whitespace, etc"""
+    
     # Remove things inside parenthesis
     title = re.sub(r'\([^)]*\)', '', v.title)
     author = re.sub(r'\([^)]*\)', '', v.author)
@@ -57,7 +62,6 @@ def filename_processor(v:YouTube) -> str:
     # Remove this (Case insensitive)
     title = re.sub('music video', '', title, flags=re.IGNORECASE)
     title = re.sub(r'official', '', title, flags=re.IGNORECASE)
-    # title = re.sub(r'TVアニメ', '', title, flags=re.IGNORECASE)
 
     author = re.sub(r'official', '', author, flags=re.IGNORECASE)
     
@@ -80,7 +84,7 @@ def filename_processor(v:YouTube) -> str:
     return result
 
 
-def get_videos(url):
+def get_videos(url) -> list:
     """Returns a list of YouTube Objects"""
     result = []
     if 'list' in url:
