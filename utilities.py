@@ -1,5 +1,7 @@
 import sys
 
+# From https://github.com/pytube/pytube/issues/723 from user Asi4nn
+# Liked this function too much for not copying it.
 def convert_time(seconds: int):
     '''
     Returns a string of the time in the most optimal units
